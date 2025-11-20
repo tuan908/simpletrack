@@ -16,5 +16,6 @@ export const contact = pgTableWithAudit("contact", {
   company: varchar("company", { length: 255 }),
   status: integer("status").notNull().default(ContactStatus.New),
 });
+
 export type ContactRow = typeof contact.$inferSelect;
 export type NewContactRow = typeof contact.$inferInsert;

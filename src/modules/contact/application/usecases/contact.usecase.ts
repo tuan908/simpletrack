@@ -1,4 +1,6 @@
 import { Result } from "@/core/contracts/Result";
+import { ContactStatus } from "@/infra/db/schema";
+import { Contact } from "../../domain/Contact";
 import type { IContactRepository } from "../ports/contact-repository.interface";
 
 export class ContactUseCase {
@@ -6,14 +8,14 @@ export class ContactUseCase {
 
   async execute() {
     // const contacts = await this.repo.getContacts();
-    const contacts = [
+    const contacts: Contact[] = [
       {
         id: "d3e2f3f0-1a2b-4c3d-9e4f-111111111111",
         name: "Alice Johnson",
         email: "alice.johnson@example.com",
         phone: "+1 (555) 123-4567",
         company: "Blue Pine Co.",
-        status: 0, // New
+        status: ContactStatus[0], // New
       },
       {
         id: "a5b6c7d8-2222-3333-4444-222222222222",
@@ -21,23 +23,23 @@ export class ContactUseCase {
         email: "bob.martinez@example.com",
         phone: "+1 (555) 987-6543",
         company: "Acme Widgets",
-        status: 1, // Talking
+        status: ContactStatus[1], // Talking
       },
       {
         id: "c9d8e7f6-3333-4444-5555-333333333333",
         name: "Chloe Zhang",
         email: "chloe.zhang@example.com",
-        phone: null,
+        phone: '',
         company: "Orbit Labs",
-        status: 2, // Won
+        status: ContactStatus[2], // Won
       },
       {
         id: "f1e2d3c4-4444-5555-6666-444444444444",
         name: "Daniel Kim",
-        email: null,
+        email: '',
         phone: "+44 20 7946 0958",
         company: "North Star",
-        status: 3, // Lost
+        status: ContactStatus[3], // Lost
       },
       {
         id: "b7a6c5d4-5555-6666-7777-555555555555",
@@ -45,7 +47,7 @@ export class ContactUseCase {
         email: "elena.petrova@example.com",
         phone: "+7 495 123-4567",
         company: "Moscow Tech",
-        status: 0,
+        status: ContactStatus[0],
       },
     ];
     return Result.ok(contacts);
