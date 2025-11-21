@@ -13,9 +13,10 @@ interface ApiError {
 }
 
 function getUrl() {
-  if (process.env.VERCEL_URL)
-    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/v1`;
-  return "http://localhost:3000/api/v1";
+  if(!process.env.NEXT_PUBLIC_VERCEL_URL) {
+    return "http://localhost:3000/api/v1";
+  }
+  return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/v1`;
 }
 
 class HttpClient {
