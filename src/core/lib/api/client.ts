@@ -15,10 +15,10 @@ interface ApiError {
 function getUrl() {
   let url: string = "";
 
-  if (!process.env.NEXT_PUBLIC_VERCEL_URL) {
+  if (!process.env.NEXT_PUBLIC_API_URL) {
     url = "http://localhost:3000/api/v1";
   } else {
-    url = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/v1`;
+    url = `https://${process.env.NEXT_PUBLIC_API_URL}/api/v1`;
   }
 
   if (url) throw new Error("API base URL is not defined");
