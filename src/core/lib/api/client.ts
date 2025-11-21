@@ -21,8 +21,8 @@ function getUrl() {
     url = `https://${process.env.NEXT_PUBLIC_API_URL}/api/v1`;
   }
 
-  if (url) throw new Error("API base URL is not defined");
   console.info("[URL]", url);
+  if (!url) throw new Error("API base URL is not defined");
   return url;
 }
 
