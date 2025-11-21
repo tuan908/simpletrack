@@ -1,19 +1,20 @@
+import { PaginatedParams } from "@/core/contracts/Paginated";
 import { Result } from "@/core/contracts/Result";
 import { contact, db } from "@/infra/db/client";
+import { desc } from "drizzle-orm";
 import { v7 } from "uuid";
 import { IContactRepository } from "../application/ports/contact-repository.interface";
 import { CreateContactPayload } from "../domain/Contact";
 
 export const contactRepo: IContactRepository = {
-  async getContacts({
-    page = 1,
-    pageSize = 200,
-  }: {
-    page?: number;
-    pageSize?: number;
-  }) {
+  async getContacts({ page = 1, pageSize = 10 }: PaginatedParams) {
     const offset = (page - 1) * pageSize;
-    return db.select().from(contact).limit(pageSize).offset(offset);
+    return db
+      .select()
+      .from(contact)
+      .limit(pageSize)
+      .offset(offset)
+      .orderBy(desc(contact.createdAt));
   },
   async createContact(contactPayload: CreateContactPayload) {
     try {
@@ -31,7 +32,10 @@ export const contactRepo: IContactRepository = {
         email: contactPayload?.email ?? null,
         phone: contactPayload?.phone ?? null,
         company: contactPayload?.company ?? null,
-        status: typeof contactPayload?.status === "number" ? contactPayload?.status : 0,
+        status:
+          typeof contactPayload?.status === "number"
+            ? contactPayload?.status
+            : 0,
       };
 
       // Insert via drizzle

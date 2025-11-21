@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const searchParams  = req.nextUrl.searchParams; // For future query params
   const page = Number(searchParams.get("page")) || 1;
-  const pageSize = Number(searchParams.get("pageSize")) || 200;
+  const pageSize = Number(searchParams.get("pageSize")) || 10;
   const contacts = await contactUseCase.getContacts({page, pageSize});
   if (!contacts.ok) {
     return NextResponse.json(Result.fail(contacts.errors));

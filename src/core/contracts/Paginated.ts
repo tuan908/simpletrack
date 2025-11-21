@@ -1,5 +1,10 @@
 // core/contracts/Paginated.ts
 
+export interface PaginatedParams {
+  page: number; // current page (1-based)
+  pageSize: number; // items per page
+}
+
 export interface Paginated<T> {
   items: T[];
   total: number; // total number of items across all pages

@@ -13,10 +13,17 @@ interface ApiError {
 }
 
 function getUrl() {
-  if(!process.env.NEXT_PUBLIC_VERCEL_URL) {
-    return "http://localhost:3000/api/v1";
+  let url: string = "";
+
+  if (!process.env.NEXT_PUBLIC_VERCEL_URL) {
+    url = "http://localhost:3000/api/v1";
+  } else {
+    url = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/v1`;
   }
-  return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/v1`;
+
+  if (url) throw new Error("API base URL is not defined");
+  console.info("[URL]", url);
+  return url;
 }
 
 class HttpClient {

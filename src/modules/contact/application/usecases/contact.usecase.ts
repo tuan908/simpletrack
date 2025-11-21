@@ -1,3 +1,4 @@
+import { PaginatedParams } from "@/core/contracts/Paginated";
 import { Result } from "@/core/contracts/Result";
 import { v7 } from "uuid";
 import { CreateContactPayload } from "../../domain/Contact";
@@ -7,13 +8,7 @@ import type { IContactRepository } from "../ports/contact-repository.interface";
 export class ContactUseCase {
   constructor(private repo: IContactRepository) {}
 
-  async getContacts({
-    pageSize = 200,
-    page = 1,
-  }: {
-    pageSize?: number;
-    page?: number;
-  }) {
+  async getContacts({ pageSize = 10, page = 1 }: PaginatedParams) {
     const contacts = await this.repo.getContacts({ page, pageSize });
     return Result.ok(contacts.map(contact => mapContactRowToDomain(contact)));
   }
