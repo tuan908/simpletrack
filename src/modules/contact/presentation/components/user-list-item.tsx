@@ -19,14 +19,7 @@ export function UserListItem(props: UserListItemProps) {
 
   return (
     <div
-      className="
-      w-full bg-white
-      border border-gray-200 rounded-lg shadow-sm
-      p-4
-      flex flex-col gap-3
-      md:flex-row md:items-center md:justify-between
-      transition-all hover:shadow-md
-    "
+      className="w-full bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between transition-all hover:shadow-md"
     >
       {/* Left Side: Name and Company */}
       <div className="flex flex-col">

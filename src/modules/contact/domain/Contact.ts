@@ -6,3 +6,19 @@ export interface Contact {
     company?: string;
     status: string;
 }
+
+export interface CreateContactPayload {
+  name: string;
+  email?: string | null;
+  phone?: string | null;
+  company?: string | null;
+  status?: number;
+}
+
+export interface CreateContactResultSuccess {
+  id: string;
+}
+
+export interface CreateContactResultFailure {
+  error: string;
+}
