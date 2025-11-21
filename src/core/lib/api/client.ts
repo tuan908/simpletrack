@@ -1,5 +1,3 @@
-import { env } from "@/core/config/env";
-
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 interface RequestOptions extends Omit<RequestInit, "body"> {
@@ -14,7 +12,11 @@ interface ApiError {
   [key: string]: unknown; // Allow additional properties
 }
 
-const { NEXT_PUBLIC_API_URL } = env();
+function getUrl() {
+  if (process.env.VERCEL_URL)
+    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/v1`;
+  return "http://localhost:3000/api/v1";
+}
 
 class HttpClient {
   private baseUrl: string;
@@ -119,4 +121,4 @@ class HttpClient {
   }
 }
 
-export const api = new HttpClient(NEXT_PUBLIC_API_URL || "/api");
+export const api = new HttpClient(getUrl());
