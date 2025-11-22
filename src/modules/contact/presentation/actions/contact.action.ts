@@ -16,9 +16,12 @@ export async function getContacts(params: { limit: number; offset: number }) {
       offset: z.number().min(0).default(0),
     }),
     requiresAuth: false,
-    handler: async input => {
+    handler: async (input) => {
       // In real implementation, use input.limit and input.offset to fetch paginated data
-      const apiResponse = await contactUseCase.getContacts({pageSize: input.limit, page: input.offset});
+      const apiResponse = await contactUseCase.getContacts({
+        pageSize: input.limit,
+        page: input.offset,
+      });
       if (!apiResponse.ok) {
         return [];
       }

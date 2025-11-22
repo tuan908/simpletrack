@@ -2,6 +2,7 @@ import { cn } from "@/core/lib/cn";
 import ReactQueryProvider from "@/core/lib/react-query/ReactQueryProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const inter = Inter({
@@ -21,12 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={cn("antialiased", inter.variable)}
-      >
-        <ReactQueryProvider>
-          {children}
-        </ReactQueryProvider>
+      <body className={cn("antialiased", inter.variable)}>
+        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <Toaster />
       </body>
     </html>
   );

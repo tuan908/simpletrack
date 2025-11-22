@@ -1,12 +1,6 @@
+import { ContactStatus } from "@/modules/contact/domain/Contact";
 import { integer, varchar } from "drizzle-orm/pg-core";
 import { pgTableWithAudit } from "../base/helper";
-
-export enum ContactStatus {
-  New,
-  Talking,
-  Won,
-  Lost,
-}
 
 export const contact = pgTableWithAudit("contact", {
   id: varchar("id", { length: 255 }).primaryKey(),

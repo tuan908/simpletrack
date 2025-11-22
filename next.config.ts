@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
     preloadEntriesOnStart: true,
     parallelServerCompiles: true,
     proxyPrefetch: "flexible",
-  }
+  },
 };
 
 export default nextConfig;

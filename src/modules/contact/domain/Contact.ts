@@ -1,10 +1,17 @@
+export enum ContactStatus {
+  New,
+  Talking,
+  Won,
+  Lost,
+}
+
 export interface Contact {
-    id: string;
-    name: string;
-    email?: string;
-    phone?: string;
-    company?: string;
-    status: string;
+  id: string;
+  name: string;
+  email?: string;
+  phone?: string;
+  company?: string;
+  status: ContactStatus;
 }
 
 export interface CreateContactPayload {

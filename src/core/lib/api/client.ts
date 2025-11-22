@@ -35,7 +35,7 @@ class HttpClient {
 
   private async request<TResponse>(
     endpoint: string,
-    options: RequestOptions = {}
+    options: RequestOptions = {},
   ): Promise<TResponse> {
     const { method = "GET", params, body, headers, ...rest } = options;
 
@@ -80,7 +80,7 @@ class HttpClient {
 
   get<TResponse>(
     endpoint: string,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<TResponse> {
     return this.request<TResponse>(endpoint, { ...options, method: "GET" });
   }
@@ -88,7 +88,7 @@ class HttpClient {
   post<TResponse>(
     endpoint: string,
     body: unknown,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<TResponse> {
     return this.request<TResponse>(endpoint, {
       ...options,
@@ -100,7 +100,7 @@ class HttpClient {
   put<TResponse>(
     endpoint: string,
     body: unknown,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<TResponse> {
     return this.request<TResponse>(endpoint, {
       ...options,
@@ -112,7 +112,7 @@ class HttpClient {
   patch<TResponse>(
     endpoint: string,
     body: unknown,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<TResponse> {
     return this.request<TResponse>(endpoint, {
       ...options,
@@ -123,7 +123,7 @@ class HttpClient {
 
   delete<TResponse>(
     endpoint: string,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<TResponse> {
     return this.request<TResponse>(endpoint, { ...options, method: "DELETE" });
   }

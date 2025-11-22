@@ -18,7 +18,7 @@ export class RateLimiter {
 
   async checkLimit(
     key: string,
-    config: RateLimitConfig
+    config: RateLimitConfig,
   ): Promise<{ allowed: boolean; remaining: number; resetAt: number }> {
     const now = Date.now();
     const entry = this.store.get(key);
@@ -63,6 +63,6 @@ export class RateLimiter {
 export const rateLimiter = new RateLimiter();
 
 // Cleanup every minute
-if (typeof window === 'undefined') {
+if (typeof window === "undefined") {
   setInterval(() => rateLimiter.cleanup(), 60000);
 }

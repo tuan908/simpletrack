@@ -8,7 +8,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/core/components/ui/dialog";
 import { Input } from "@/core/components/ui/input";
 import { Label } from "@/core/components/ui/label";
@@ -23,11 +22,11 @@ import { Result } from "@/core/contracts/Result";
 import { api } from "@/core/lib/api/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { startTransition, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { ContactStatus } from "../../domain/Contact";
+import { Contact, ContactStatus } from "../../domain/Contact";
 import { statusOptions } from "../../infra/contact.constant";
 
 const contactSchema = z.object({
@@ -45,16 +44,22 @@ const contactSchema = z.object({
 
 type ContactForm = z.infer<typeof contactSchema>;
 
-export function CreateContactModal() {
-  const [open, setOpen] = useState(false);
+interface UpdateContactModalProps {
+  contact: Contact;
+  open: boolean;
+  onClose: (open: boolean) => void;
+}
+
+export function UpdateContactModal(props: UpdateContactModalProps) {
+  const { contact, open, onClose } = props;
   const queryClient = useQueryClient();
 
-  const { mutateAsync: createContact, isPending: loading } = useMutation({
+  const { mutateAsync: updateContact, isPending: loading } = useMutation({
     mutationFn: async (data: ContactForm) => {
-      console.log("Creating contact with data:", data);
-      const res = await api.post<
+      const res = await api.patch<
         Result<{ id: string }, Array<{ error: string }>>
       >("/contacts", {
+        id: contact.id,
         name: data.name,
         email: data.email,
         phone: data.phone,
@@ -77,7 +82,7 @@ export function CreateContactModal() {
     },
     onSuccess: (data, _variables) => {
       toast.success("Success", {
-        description: "Contact created successfully.",
+        description: "Contact updated successfully.",
       });
     },
     onSettled: () => {
@@ -105,16 +110,24 @@ export function CreateContactModal() {
   });
 
   useEffect(() => {
-    if (open) {
-      requestAnimationFrame(() => setFocus("name"));
+    if (contact) {
+      reset({
+        name: contact?.name ?? "",
+        company: contact?.company ?? "",
+        email: contact?.email ?? "",
+        phone: contact?.phone ?? "",
+        status: contact?.status ?? ContactStatus.New,
+      });
     }
-  }, [open, setFocus]);
-  console.log(errors);
+  }, [contact]);
 
   async function onSubmit(values: ContactForm) {
+    console.log("Submitting", values);
     try {
-      await createContact(values);
-      setOpen(false);
+      startTransition(async () => {
+        await updateContact(values);
+      });
+      onClose(false);
       reset(); // Reset form after successful submission
     } catch (err) {
       // Error is already handled in onError
@@ -122,15 +135,10 @@ export function CreateContactModal() {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="default" size="sm">
-          New Contact
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create Contact</DialogTitle>
+          <DialogTitle>Update Contact</DialogTitle>
         </DialogHeader>
 
         <form
@@ -157,7 +165,12 @@ export function CreateContactModal() {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <Label htmlFor="email">Email</Label>
-              <Input {...register("email")} placeholder="email@example.com" />
+              <Input
+                id="email"
+                {...register("email")}
+                placeholder="email@example.com"
+                type="email"
+              />
               {errors.email && (
                 <p className="text-destructive text-sm">
                   {String(errors.email.message)}
@@ -177,9 +190,7 @@ export function CreateContactModal() {
               name="status"
               render={({ field }) => (
                 <Select
-                  onValueChange={v =>
-                    field.onChange(Number(v) as ContactStatus)
-                  }
+                  onValueChange={v => field.onChange(Number(v))}
                   value={String(field.value)}
                 >
                   <SelectTrigger aria-label="Status" className="w-full">
@@ -187,10 +198,7 @@ export function CreateContactModal() {
                   </SelectTrigger>
                   <SelectContent>
                     {statusOptions.map(option => (
-                      <SelectItem
-                        key={option.value}
-                        value={String(option.value)}
-                      >
+                      <SelectItem key={option.value} value={String(option.value)}>
                         {option.label}
                       </SelectItem>
                     ))}
@@ -204,14 +212,14 @@ export function CreateContactModal() {
             <Button
               variant="outline"
               type="button"
-              onClick={() => setOpen(false)}
+              onClick={() => onClose(false)}
               disabled={loading}
             >
               Cancel
             </Button>
             <SubmitButton
               submitting={loading}
-              label="Create"
+              label="Update"
               loadingLabel="Saving..."
             />
           </DialogFooter>

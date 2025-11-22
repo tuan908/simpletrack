@@ -8,7 +8,6 @@ import { Suspense } from "react";
  * Fetches contacts from the database server-side and renders list or empty state.
  */
 export default async function Dashboard() {
-
   return (
     <div className="p-8 bg-gray-50 min-h-screen flex flex-col gap-4 mx-auto">
       <div className="flex items-center justify-between">
@@ -16,7 +15,7 @@ export default async function Dashboard() {
         <CreateContactModal />
       </div>
 
-    <Suspense fallback={<ContactListSkeleton count={20} />}>
+      <Suspense fallback={<ContactListSkeleton count={20} />}>
         <ContactList />
       </Suspense>
     </div>

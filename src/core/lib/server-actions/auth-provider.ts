@@ -24,19 +24,19 @@ export class NextAuthProvider implements AuthProvider {
 
     // For demonstration purposes:
     try {
-      const { cookies } = await import('next/headers');
+      const { cookies } = await import("next/headers");
       const sessionCookie = await cookies();
 
-      const sessionCookieValue = sessionCookie.get('session')?.value;
+      const sessionCookieValue = sessionCookie.get("session")?.value;
 
       if (!sessionCookieValue) return null;
 
       // Validate and decode your session token
       // This is where you'd integrate with your auth provider
       return {
-        id: 'user-123',
-        email: 'user@example.com',
-        roles: ['user'],
+        id: "user-123",
+        email: "user@example.com",
+        roles: ["user"],
       };
     } catch {
       return null;
@@ -44,6 +44,6 @@ export class NextAuthProvider implements AuthProvider {
   }
 
   hasRole(user: User, roles: string[]): boolean {
-    return roles.some(role => user.roles.includes(role));
+    return roles.some((role) => user.roles.includes(role));
   }
 }

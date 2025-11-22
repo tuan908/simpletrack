@@ -22,7 +22,7 @@ interface CreateActionConfig<TInput, TOutput> {
   handler: (
     input: TInput,
     context: ActionContext,
-    user: User | null
+    user: User | null,
   ) => Promise<TOutput>;
 }
 
@@ -30,7 +30,7 @@ interface CreateActionConfig<TInput, TOutput> {
  * Factory function to create type-safe server actions with middleware
  */
 export async function createAction<TInput, TOutput>(
-  config: CreateActionConfig<TInput, TOutput>
+  config: CreateActionConfig<TInput, TOutput>,
 ) {
   const authProvider: AuthProvider = new NextAuthProvider();
   return async (rawInput: TInput): Promise<ActionResult<TOutput>> => {
@@ -56,7 +56,7 @@ export async function createAction<TInput, TOutput>(
         logger.warn("Unauthorized access attempt");
         return createErrorResult(
           ErrorCode.UNAUTHORIZED,
-          "Authentication required"
+          "Authentication required",
         );
       }
 
@@ -70,7 +70,7 @@ export async function createAction<TInput, TOutput>(
           });
           return createErrorResult(
             ErrorCode.FORBIDDEN,
-            "Insufficient permissions"
+            "Insufficient permissions",
           );
         }
       }
@@ -82,14 +82,14 @@ export async function createAction<TInput, TOutput>(
           : `ip:${context.ipAddress}`;
         const { allowed, remaining } = await rateLimiter.checkLimit(
           rateLimitKey,
-          config.rateLimit
+          config.rateLimit,
         );
 
         if (!allowed) {
           logger.warn("Rate limit exceeded", { key: rateLimitKey });
           return createErrorResult(
             ErrorCode.RATE_LIMIT_EXCEEDED,
-            "Too many requests. Please try again later."
+            "Too many requests. Please try again later.",
           );
         }
 
@@ -106,7 +106,7 @@ export async function createAction<TInput, TOutput>(
         return createErrorResult(
           ErrorCode.VALIDATION_ERROR,
           "Invalid input",
-          validationResult.error.flatten()
+          validationResult.error.flatten(),
         );
       }
 
@@ -132,14 +132,14 @@ export async function createAction<TInput, TOutput>(
       if (process.env.NODE_ENV === "production") {
         return createErrorResult(
           ErrorCode.INTERNAL_ERROR,
-          "An unexpected error occurred"
+          "An unexpected error occurred",
         );
       }
 
       return createErrorResult(
         ErrorCode.INTERNAL_ERROR,
         error instanceof Error ? error.message : "Unknown error",
-        error
+        error,
       );
     }
   };
@@ -180,7 +180,7 @@ async function buildContext(
 function createErrorResult(
   code: ErrorCode,
   message: string,
-  details?: unknown
+  details?: unknown,
 ): ActionResult<never> {
   const statusCodeMap: Record<ErrorCode, number> = {
     [ErrorCode.UNAUTHORIZED]: 401,
