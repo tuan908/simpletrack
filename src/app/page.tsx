@@ -7,7 +7,7 @@ import { Suspense } from "react";
  * Home / Dashboard
  * Fetches contacts from the database server-side and renders list or empty state.
  */
-export default async function Dashboard() {
+export default function Dashboard() {
   return (
     <div className="p-8 bg-gray-50 min-h-screen flex flex-col gap-4 mx-auto">
       <div className="flex items-center justify-between">

@@ -1,5 +1,10 @@
 "use client";
 
+import { useTRPC } from "@/api/trpc/client";
+import {
+  CreateContactForm,
+  createContactInput,
+} from "@/api/trpc/schemas/contact";
 import { SubmitButton } from "@/core/components/submit-button";
 import { Button } from "@/core/components/ui/button";
 import {
@@ -19,72 +24,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/core/components/ui/select";
-import { Result } from "@/core/contracts/Result";
-import { api } from "@/core/lib/api/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
 import { ContactStatus } from "../../domain/Contact";
 import { statusOptions } from "../../infra/contact.constant";
-
-const contactSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  company: z.string().optional(),
-  email: z
-    .string()
-    .optional()
-    .refine(v => !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), {
-      message: "Invalid email",
-    }),
-  phone: z.string().optional(),
-  status: z.enum(ContactStatus),
-});
-
-type ContactForm = z.infer<typeof contactSchema>;
 
 export function CreateContactModal() {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
-
-  const { mutateAsync: createContact, isPending: loading } = useMutation({
-    mutationFn: async (data: ContactForm) => {
-      console.log("Creating contact with data:", data);
-      const res = await api.post<
-        Result<{ id: string }, Array<{ error: string }>>
-      >("/contacts", {
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        company: data.company,
-        status: data.status,
-      });
-
-      if (res.ok) {
-        return { id: res.value.id };
-      }
-
-      throw new Error(res.errors?.[0]?.error || "Failed to create contact");
-    },
-    onError: (err, _newContact, _context) => {
-      console.error("create contact failed", err);
-      toast.error("Failed", {
-        description:
-          err instanceof Error ? err.message : "Failed to create contact.",
-      });
-    },
-    onSuccess: (data, _variables) => {
-      toast.success("Success", {
-        description: "Contact created successfully.",
-      });
-    },
-    onSettled: () => {
-      // Always refetch after error or success to ensure sync
-      queryClient.invalidateQueries({ queryKey: ["contacts"] });
-    },
-  });
+  const trpc = useTRPC();
+  const { mutateAsync: createContact, isPending: loading } = useMutation(
+    trpc.contacts.create.mutationOptions({
+      onError: (err, _newContact, _context) => {
+        console.error("create contact failed", err);
+        toast.error("Failed", {
+          description:
+            err instanceof Error ? err.message : "Failed to create contact.",
+        });
+      },
+      onSuccess: (data, _variables) => {
+        toast.success("Success", {
+          description: "Contact created successfully.",
+        });
+      },
+      onSettled: () => {
+        // Always refetch after error or success to ensure sync
+        queryClient.invalidateQueries({ queryKey: trpc.contacts.list.queryKey() });
+      },
+    })
+  );
 
   const {
     register,
@@ -93,8 +64,8 @@ export function CreateContactModal() {
     reset,
     setFocus,
     formState: { errors },
-  } = useForm<ContactForm>({
-    resolver: zodResolver(contactSchema),
+  } = useForm<CreateContactForm>({
+    resolver: zodResolver(createContactInput),
     defaultValues: {
       name: "",
       company: "",
@@ -111,7 +82,7 @@ export function CreateContactModal() {
   }, [open, setFocus]);
   console.log(errors);
 
-  async function onSubmit(values: ContactForm) {
+  async function onSubmit(values: CreateContactForm) {
     try {
       await createContact(values);
       setOpen(false);

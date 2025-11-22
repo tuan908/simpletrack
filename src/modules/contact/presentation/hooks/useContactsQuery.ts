@@ -1,9 +1,13 @@
+import { useTRPC } from "@/api/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { contactQueryOptions } from "../../infra/contact.query-options";
 
 export function useContactsQuery() {
+  const trpc = useTRPC();
   const { data, isLoading, isError } = useSuspenseQuery(
-    contactQueryOptions.list({ page: 1, pageSize: 10 }),
+    trpc.contacts.list.queryOptions({
+      page: 1,
+      pageSize: 10,
+    })
   );
 
   if (!data.ok) {

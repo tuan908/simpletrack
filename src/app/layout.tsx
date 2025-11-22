@@ -1,5 +1,6 @@
+import { TRPCReactProvider } from "@/api/trpc/client";
+import { HydrateClient } from "@/api/trpc/server";
 import { cn } from "@/core/lib/cn";
-import ReactQueryProvider from "@/core/lib/react-query/ReactQueryProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
@@ -23,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn("antialiased", inter.variable)}>
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <TRPCReactProvider>
+          <HydrateClient>{children}</HydrateClient>
+        </TRPCReactProvider>
         <Toaster />
       </body>
     </html>
