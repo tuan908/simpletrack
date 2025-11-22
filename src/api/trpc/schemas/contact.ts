@@ -7,7 +7,7 @@ export const createContactInput = z.object({
   email: z
     .string()
     .optional()
-    .refine(v => !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), {
+    .refine((v) => !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), {
       message: "Invalid email",
     }),
   phone: z.string().optional(),
@@ -23,7 +23,7 @@ export const updateContactInput = z.object({
   email: z
     .string()
     .optional()
-    .refine(v => !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), {
+    .refine((v) => !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), {
       message: "Invalid email",
     }),
   phone: z.string().optional(),

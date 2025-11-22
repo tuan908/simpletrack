@@ -10,24 +10,28 @@ const getContactsInput = z.object({
 });
 
 export const contactsRouter = createTrpcRouter({
-  list: publicProcedure
-    .input(getContactsInput)
-    .query(async ({ input }) => {
-      const result = await contactModule.usecases.getContacts.execute({
-        page: input?.page ?? 1,
-        pageSize: input?.pageSize ?? 10,
-      });
-      if (!result.ok) return Result.fail([{ error: "Failed to get contacts" }]);
+  list: publicProcedure.input(getContactsInput).query(async ({ input }) => {
+    const result = await contactModule.usecases.getContacts.execute({
+      page: input?.page ?? 1,
+      pageSize: input?.pageSize ?? 10,
+    });
+    if (!result.ok) return Result.fail([{ error: "Failed to get contacts" }]);
+    return result;
+  }),
+  create: publicProcedure
+    .input(createContactInput)
+    .mutation(async ({ input }) => {
+      const result = await contactModule.usecases.createContact.execute(input);
+      if (!result.ok)
+        return Result.fail([{ error: "Failed to create contact" }]);
       return result;
     }),
-  create: publicProcedure.input(createContactInput).mutation(async ({input}) => {
-      const result = await contactModule.usecases.createContact.execute(input);
-      if (!result.ok) return Result.fail([{ error: "Failed to create contact" }]);
-      return result;
-  }),
-  update: publicProcedure.input(updateContactInput).mutation(async ({input}) => {
+  update: publicProcedure
+    .input(updateContactInput)
+    .mutation(async ({ input }) => {
       const result = await contactModule.usecases.updateContact.execute(input);
-      if (!result.ok) return Result.fail([{ error: "Failed to update contact" }]);
+      if (!result.ok)
+        return Result.fail([{ error: "Failed to update contact" }]);
       return result;
-  }),
+    }),
 });

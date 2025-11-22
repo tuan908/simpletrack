@@ -37,7 +37,7 @@ export function CreateContactModal() {
   const queryClient = useQueryClient();
   const trpc = useTRPC();
   const { mutateAsync: createContact, isPending: loading } = useMutation(
-    trpc.contacts.create.mutationOptions({
+    trpc.contact.create.mutationOptions({
       onError: (err, _newContact, _context) => {
         console.error("create contact failed", err);
         toast.error("Failed", {
@@ -52,9 +52,11 @@ export function CreateContactModal() {
       },
       onSettled: () => {
         // Always refetch after error or success to ensure sync
-        queryClient.invalidateQueries({ queryKey: trpc.contacts.list.queryKey() });
+        queryClient.invalidateQueries({
+          queryKey: trpc.contact.list.queryKey(),
+        });
       },
-    })
+    }),
   );
 
   const {
@@ -148,7 +150,7 @@ export function CreateContactModal() {
               name="status"
               render={({ field }) => (
                 <Select
-                  onValueChange={v =>
+                  onValueChange={(v) =>
                     field.onChange(Number(v) as ContactStatus)
                   }
                   value={String(field.value)}
@@ -157,7 +159,7 @@ export function CreateContactModal() {
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
-                    {statusOptions.map(option => (
+                    {statusOptions.map((option) => (
                       <SelectItem
                         key={option.value}
                         value={String(option.value)}

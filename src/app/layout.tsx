@@ -1,5 +1,4 @@
 import { TRPCReactProvider } from "@/api/trpc/client";
-import { HydrateClient } from "@/api/trpc/server";
 import { cn } from "@/core/lib/cn";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -24,9 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn("antialiased", inter.variable)}>
-        <TRPCReactProvider>
-          <HydrateClient>{children}</HydrateClient>
-        </TRPCReactProvider>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
         <Toaster />
       </body>
     </html>

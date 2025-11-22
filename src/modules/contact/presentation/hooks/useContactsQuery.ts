@@ -4,10 +4,10 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 export function useContactsQuery() {
   const trpc = useTRPC();
   const { data, isLoading, isError } = useSuspenseQuery(
-    trpc.contacts.list.queryOptions({
+    trpc.contact.list.queryOptions({
       page: 1,
       pageSize: 10,
-    })
+    }),
   );
 
   if (!data.ok) {

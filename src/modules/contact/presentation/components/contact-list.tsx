@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import { ContactStatus } from "../../domain/Contact";
@@ -26,7 +26,7 @@ export function ContactList() {
   return (
     <>
       <div className="flex flex-col gap-3 md:grid md:grid-cols-3 md:grid-rows-3">
-        {contacts.map(c => (
+        {contacts.map((c) => (
           <UserListItem
             key={c.id}
             contact={c}
