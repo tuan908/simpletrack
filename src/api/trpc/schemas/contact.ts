@@ -31,3 +31,9 @@ export const updateContactInput = z.object({
 });
 
 export type UpdateContactForm = z.infer<typeof updateContactInput>;
+
+export const deleteContactInput = z.object({
+  id: z.string().min(1, "ID is required"),
+});
+
+export type DeleteContactForm = z.infer<typeof deleteContactInput>;

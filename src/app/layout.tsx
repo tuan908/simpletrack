@@ -1,7 +1,10 @@
 import { TRPCReactProvider } from "@/api/trpc/client";
 import { cn } from "@/core/lib/cn";
+import { Loader2 } from "lucide-react";
 import type { Metadata } from "next";
+import { NextIntlClientProvider } from "next-intl";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
 
@@ -23,8 +26,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn("antialiased", inter.variable)}>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
-        <Toaster />
+        <Suspense
+          fallback={
+            <div className="fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center">
+              <Loader2 className="animate-spin" />
+            </div>
+          }
+        >
+          <NextIntlClientProvider>
+            <TRPCReactProvider>{children}</TRPCReactProvider>
+          </NextIntlClientProvider>
+          <Toaster />
+        </Suspense>
       </body>
     </html>
   );

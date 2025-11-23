@@ -1,37 +1,37 @@
-// core/contracts/Result.ts
+import type { ErrorCode, ErrorDetail } from "./ErrorCodes";
 
+// core/contracts/Result.ts
 export type ResultSuccess<T> = {
   ok: true;
   value: T;
 };
 
-export type ResultFailure<E = unknown> = {
+export type ResultFailure = {
   ok: false;
-  errors: E;
+  errors: ErrorDetail[]; // Always an array of structured errors
 };
 
-export type Result<T, E = unknown> = ResultSuccess<T> | ResultFailure<E>;
+export type Result<T> = ResultSuccess<T> | ResultFailure;
 
-/**
- * Helper namespace-style object so you can write:
- *   Result.ok(...)
- *   Result.fail(...)
- */
 export const Result = {
-  ok<T, E = never>(value: T): Result<T, E> {
+  ok<T>(value: T): Result<T> {
     return { ok: true, value };
   },
 
-  fail<T = never, E = unknown>(errors: E): Result<T, E> {
+  fail<T = never>(errors: ErrorDetail[]): Result<T> {
     return { ok: false, errors };
   },
 
-  /**
-   * Combine multiple results:
-   * - returns first failure if any
-   * - otherwise returns ok(void)
-   */
-  combine<E = unknown>(results: Result<unknown, E>[]): Result<void, E> {
+  // Convenience helper for single error
+  failWith<T = never>(
+    message: string,
+    field?: string,
+    code?: ErrorCode,
+  ): Result<T> {
+    return { ok: false, errors: [{ message, field, code }] };
+  },
+
+  combine(results: Result<unknown>[]): Result<void> {
     for (const r of results) {
       if (!r.ok) return r;
     }

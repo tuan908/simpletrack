@@ -1,0 +1,17 @@
+{
+  "VALIDATION_ERROR": "Lỗi xác thực",
+  "INTERNAL_ERROR": "Lỗi máy chủ nội bộ",
+  "NOT_FOUND": "Không tìm thấy",
+  "UNAUTHORIZED": "Không được ủy quyền",
+  "FORBIDDEN": "Bị cấm",
+  "CONTACT_NOT_FOUND": "Không tìm thấy liên hệ",
+  "DUPLICATE_EMAIL": "Email đã tồn tại",
+  "DUPLICATE_PHONE": "Số điện thoại đã tồn tại",
+  "INVALID_CONTACT_STATUS": "Trạng thái liên hệ không hợp lệ",
+  "NOTE_NOT_FOUND": "Không tìm thấy ghi chú",
+  "INVALID_NOTE_TYPE": "Loại ghi chú không hợp lệ",
+  "REMINDER_NOT_FOUND": "Không tìm thấy lời nhắc",
+  "PAST_DUE_DATE": "Ngày đáo hạn không thể ở trong quá khứ",
+  "DATABASE_ERROR": "Lỗi cơ sở dữ liệu",
+  "CONSTRAINT_VIOLATION": "Vi phạm ràng buộc"
+}

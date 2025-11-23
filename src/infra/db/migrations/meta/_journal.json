@@ -8,6 +8,20 @@
       "when": 1763615052100,
       "tag": "0000_motionless_mandroid",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1763831075606,
+      "tag": "0001_perfect_shiva",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1763900655588,
+      "tag": "0002_confused_vargas",
+      "breakpoints": true
     }
   ]
 }
