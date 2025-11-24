@@ -1,4 +1,5 @@
-import { useTRPC } from "@/api/trpc/client";
+"use client";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,9 +9,7 @@ import {
   AlertDialogFooter,
   AlertDialogTitle,
 } from "@/core/components/ui/alert-dialog";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { startTransition } from "react";
-import { toast } from "sonner";
 import { Contact } from "../../domain/Contact";
 import { useDeleteContact } from "../hooks/useDeleteContact";
 

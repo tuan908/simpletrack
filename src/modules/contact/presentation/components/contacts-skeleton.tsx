@@ -1,6 +1,6 @@
-export function ContactListSkeleton({ count = 3 }: { count?: number }) {
+export function ContactsSkeleton({ count = 3 }: { count?: number }) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 md:grid md:grid-cols-3 md:grid-rows-3">
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}

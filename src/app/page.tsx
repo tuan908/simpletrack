@@ -1,13 +1,34 @@
-import { prefetch, trpc } from "@/api/trpc/server";
-import { ContactList } from "@/modules/contact/presentation/components/contact-list";
+"use client";
+
+import { useDebounce } from "@/core/lib/hooks/useDebounce"; // Add useDebounce import
+import { ContactSearchInput } from "@/modules/contact/presentation/components/contact-search-input"; // Renamed from contact-search-input.tsx
+import { Contacts } from "@/modules/contact/presentation/components/contacts";
 import { CreateContactModal } from "@/modules/contact/presentation/components/create-contact-modal";
+import { useState } from "react";
 
 /**
  * Home / Dashboard
  * Fetches contacts from the database server-side and renders list or empty state.
  */
-export default async function Dashboard() {
-  prefetch(trpc.contact.list.queryOptions({ page: 1, pageSize: 10 }));
+export default function Dashboard() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [committedSearch, setCommittedSearch] = useState("");
+
+  const debouncedSearch = useDebounce(searchQuery, 500); // 500ms debounce
+  const activeSearch = committedSearch || debouncedSearch;
+
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    // Clear committed search when user types
+    if (committedSearch) {
+      setCommittedSearch("");
+    }
+  };
+
+  const handleSearch = (value: string) => {
+    // Immediate search on Enter
+    setCommittedSearch(value);
+  };
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen flex flex-col gap-4 mx-auto">
@@ -16,7 +37,16 @@ export default async function Dashboard() {
         <CreateContactModal />
       </div>
 
-      <ContactList />
+      <div className="space-y-4">
+        <ContactSearchInput
+          value={searchQuery}
+          onChange={handleSearchChange}
+          onSearch={handleSearch}
+          placeholder="Search by name, company, email, or phone..."
+        />
+      </div>
+
+        <Contacts activeSearch={activeSearch} />
     </div>
   );
 }

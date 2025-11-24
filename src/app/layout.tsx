@@ -1,11 +1,9 @@
 import { TRPCReactProvider } from "@/api/trpc/client";
 import { cn } from "@/core/lib/cn";
 import type { Metadata } from "next";
-import { NextIntlClientProvider } from "next-intl";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
-import { cookies } from "next/headers";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -22,13 +20,10 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
-
   return (
     <html lang="en">
       <body className={cn("antialiased", inter.variable)}>
-        <NextIntlClientProvider>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
-        </NextIntlClientProvider>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
         <Toaster />
       </body>
     </html>
