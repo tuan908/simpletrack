@@ -1,4 +1,3 @@
-
 export function EmptyState() {
   return (
     <div className="w-full bg-white border border-dashed border-gray-200 rounded-lg p-8 flex flex-col items-center text-center gap-4">

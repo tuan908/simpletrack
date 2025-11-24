@@ -32,7 +32,7 @@ export function ContactSearchInput({
         type="text"
         placeholder={placeholder}
         value={value}
-        onChange={e => onChange(e.target.value)}
+        onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
         className="pl-9 pr-9"
       />

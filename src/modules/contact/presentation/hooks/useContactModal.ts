@@ -1,6 +1,6 @@
 // hooks/useContactModal.ts
-import { useState } from 'react';
-import { ContactStatus } from '../../domain/Contact';
+import { useState } from "react";
+import { ContactStatus } from "../../domain/Contact";
 
 export function useContactModal() {
   const [open, setOpen] = useState(false);

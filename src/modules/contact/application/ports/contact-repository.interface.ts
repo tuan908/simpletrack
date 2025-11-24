@@ -7,7 +7,11 @@ import {
 } from "../../domain/Contact";
 
 export interface IContactRepository {
-  getContacts({ page, pageSize, search }: PaginatedParams): Promise<ContactRow[]>;
+  getContacts({
+    page,
+    pageSize,
+    search,
+  }: PaginatedParams): Promise<ContactRow[]>;
 
   createContact(
     contact: CreateContactPayload,

@@ -21,8 +21,8 @@ export const contactRepo: IContactRepository = {
           ilike(contact.name, searchTerm),
           ilike(contact.company, searchTerm),
           ilike(contact.email, searchTerm),
-          ilike(contact.phone, searchTerm)
-        )
+          ilike(contact.phone, searchTerm),
+        ),
       );
     }
 
@@ -44,7 +44,7 @@ export const contactRepo: IContactRepository = {
         return Result.failWith(
           "Name is required",
           "name",
-          ErrorCode.VALIDATION_ERROR
+          ErrorCode.VALIDATION_ERROR,
         );
       }
 
@@ -71,7 +71,7 @@ export const contactRepo: IContactRepository = {
       return Result.failWith(
         String(err?.message ?? err),
         undefined,
-        ErrorCode.DATABASE_ERROR
+        ErrorCode.DATABASE_ERROR,
       );
     }
   },
@@ -100,7 +100,7 @@ export const contactRepo: IContactRepository = {
       return Result.failWith(
         String(err?.message ?? err),
         undefined,
-        ErrorCode.DATABASE_ERROR
+        ErrorCode.DATABASE_ERROR,
       );
     }
   },
@@ -124,7 +124,7 @@ export const contactRepo: IContactRepository = {
       return Result.failWith(
         String(err?.message ?? err),
         undefined,
-        ErrorCode.DATABASE_ERROR
+        ErrorCode.DATABASE_ERROR,
       );
     }
   },

@@ -3,7 +3,7 @@
 import { useDebounce } from "@/core/lib/hooks/useDebounce";
 import { useState } from "react";
 import { useContactModal } from "../hooks/useContactModal";
-import { useContactsQuery } from "../hooks/useContactsQuery";
+import { useContacts } from "../hooks/useContacts";
 import { ContactListSkeleton } from "./contact-list-skeleton";
 import { ContactSearchInput } from "./contact-search-input";
 import { EmptyState } from "./empty-state";
@@ -23,7 +23,7 @@ export function ContactList() {
     contacts = [],
     isError,
     isLoading,
-  } = useContactsQuery({ search: activeSearch });
+  } = useContacts({ search: activeSearch });
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);

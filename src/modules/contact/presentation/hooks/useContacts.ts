@@ -5,13 +5,13 @@ interface UseContactsQueryProps {
   search?: string;
 }
 
-export function useContactsQuery({search}: UseContactsQueryProps) {
+export function useContacts({ search }: UseContactsQueryProps) {
   const trpc = useTRPC();
   const { data, isLoading, isError } = useSuspenseQuery(
     trpc.contact.list.queryOptions({
       page: 1,
       pageSize: 10,
-      search
+      search,
     }),
   );
 

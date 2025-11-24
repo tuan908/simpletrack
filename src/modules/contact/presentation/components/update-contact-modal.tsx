@@ -1,6 +1,5 @@
 "use client";
 
-import { useTRPC } from "@/api/trpc/client";
 import {
   UpdateContactForm,
   updateContactInput,
@@ -24,12 +23,11 @@ import {
   SelectValue,
 } from "@/core/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { startTransition, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { Contact, ContactStatus } from "../../domain/Contact";
 import { statusOptions } from "../../infra/contact.constant";
+import { useUpdateContactMutation } from "../hooks/useUpdateContactMutation";
 
 interface UpdateContactModalProps {
   contact: Contact;
@@ -39,32 +37,7 @@ interface UpdateContactModalProps {
 
 export function UpdateContactModal(props: UpdateContactModalProps) {
   const { contact, open, onClose } = props;
-  const queryClient = useQueryClient();
-  const trpc = useTRPC();
-
-  const { mutateAsync: updateContact, isPending: loading } = useMutation(
-    trpc.contact.update.mutationOptions({
-      onError: (err, _newContact, _context) => {
-        console.error("create contact failed", err);
-        toast.error("Failed", {
-          description:
-            err instanceof Error ? err.message : "Failed to create contact.",
-        });
-      },
-      onSuccess: (data, _variables) => {
-        toast.success("Success", {
-          description: "Contact updated successfully.",
-        });
-      },
-      onSettled: () => {
-        // Always refetch after error or success to ensure sync
-        queryClient.invalidateQueries({
-          queryKey: trpc.contact.list.queryKey(),
-        });
-      },
-    }),
-  );
-
+  const { updateContact, loading } = useUpdateContactMutation();
   const {
     register,
     handleSubmit,
