@@ -27,7 +27,7 @@ import { startTransition, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Contact, ContactStatus } from "../../domain/Contact";
 import { statusOptions } from "../../infra/contact.constant";
-import { useUpdateContactMutation } from "../hooks/useUpdateContactMutation";
+import { useUpdateContact } from "../hooks/useUpdateContact";
 
 interface UpdateContactModalProps {
   contact: Contact;
@@ -37,7 +37,7 @@ interface UpdateContactModalProps {
 
 export function UpdateContactModal(props: UpdateContactModalProps) {
   const { contact, open, onClose } = props;
-  const { updateContact, loading } = useUpdateContactMutation();
+  const { updateContact, loading } = useUpdateContact();
   const {
     register,
     handleSubmit,

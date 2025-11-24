@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { startTransition } from "react";
 import { toast } from "sonner";
 import { Contact } from "../../domain/Contact";
+import { useDeleteContact } from "../hooks/useDeleteContact";
 
 interface DeleteContactModalProps {
   open: boolean;
@@ -19,28 +20,12 @@ interface DeleteContactModalProps {
   contact: Contact;
 }
 
-export default function DeleteContactModal({
+export function DeleteContactModal({
   contact,
   open,
   onClose,
 }: DeleteContactModalProps) {
-  const trpc = useTRPC();
-  const queryClient = useQueryClient();
-  const { mutateAsync: deleteContact, isPending } = useMutation(
-    trpc.contact.delete.mutationOptions({
-      onError(_error) {
-        toast("Failed", { description: "Failed to delete contact" });
-      },
-      onSuccess(_data, _variables, _onMutateResult, _context) {
-        toast("Success", { description: "Deleted contact successfully" });
-      },
-      onSettled() {
-        queryClient.invalidateQueries({
-          queryKey: trpc.contact.list.queryKey(),
-        });
-      },
-    }),
-  );
+  const { deleteContact, loading } = useDeleteContact();
 
   async function handleDelete() {
     try {
@@ -48,9 +33,7 @@ export default function DeleteContactModal({
         deleteContact({ id: contact?.id });
       });
       onClose(true);
-    } catch (error) {
-      toast("Error", { description: "Failed to delete contact" });
-    }
+    } catch (error) {}
   }
 
   return (
@@ -62,8 +45,8 @@ export default function DeleteContactModal({
           reminders.
         </AlertDialogDescription>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDelete} disabled={isPending}>
+          <AlertDialogCancel disabled={loading}>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleDelete} disabled={loading}>
             Delete
           </AlertDialogAction>
         </AlertDialogFooter>

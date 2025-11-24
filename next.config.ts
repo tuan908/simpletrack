@@ -4,7 +4,6 @@ import createIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
-  cacheComponents: true,
   allowedDevOrigins: ["http://localhost:3000"],
   experimental: {
     scrollRestoration: true,

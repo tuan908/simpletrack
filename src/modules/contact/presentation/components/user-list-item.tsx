@@ -28,13 +28,13 @@ export function UserListItem(props: UserListItemProps) {
         <span className="text-lg font-bold text-gray-900 leading-tight">
           {contact.name}
         </span>
-        <span className="text-sm text-gray-500 mt-1">{contact.company}</span>
+        <span className="text-sm text-gray-500 mt-1">{contact?.company}</span>
       </div>
 
       {/* Right Side (Desktop) / Bottom (Mobile): Status Badge */}
       <div className="flex md:justify-end">
         <span className={`${badgeBaseClass} ${badgeColorClass}`}>
-          {ContactStatus[contact.status]}
+          {ContactStatus[contact?.status]}
         </span>
       </div>
     </div>

@@ -1,5 +1,3 @@
-"use cache";
-
 import { prefetch, trpc } from "@/api/trpc/server";
 import { ContactList } from "@/modules/contact/presentation/components/contact-list";
 import { CreateContactModal } from "@/modules/contact/presentation/components/create-contact-modal";

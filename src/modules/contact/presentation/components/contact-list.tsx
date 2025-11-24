@@ -69,7 +69,7 @@ export function ContactList() {
           </div>
         )}
         {hasResults &&
-          contacts.map(c => (
+          contacts.map((c) => (
             <UserListItem key={c.id} contact={c} onEdit={() => openModal(c)} />
           ))}
       </div>
