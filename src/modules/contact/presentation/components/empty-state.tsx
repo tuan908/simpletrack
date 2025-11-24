@@ -1,4 +1,3 @@
-import Link from "next/link";
 
 export function EmptyState() {
   return (
@@ -35,15 +34,6 @@ export function EmptyState() {
         <p className="text-sm text-gray-500 mt-2">
           Add your first contact to get started.
         </p>
-      </div>
-
-      <div className="pt-2">
-        <Link
-          href="/contacts/new"
-          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700"
-        >
-          Add your first contact
-        </Link>
       </div>
     </div>
   );

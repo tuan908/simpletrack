@@ -12,6 +12,7 @@ import { createTrpcRouter, publicProcedure } from "../trpc";
 const getContactsInput = z.object({
   page: z.number().optional(),
   pageSize: z.number().optional(),
+  search: z.string().optional(),
 });
 
 export const contactsRouter = createTrpcRouter({
@@ -19,6 +20,7 @@ export const contactsRouter = createTrpcRouter({
     const result = await contactModule.usecases.list.execute({
       page: input?.page ?? 1,
       pageSize: input?.pageSize ?? 10,
+      search: input?.search,
     });
     if (!result.ok)
       return Result.failWith(

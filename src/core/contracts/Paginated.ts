@@ -1,8 +1,9 @@
 // core/contracts/Paginated.ts
 
 export interface PaginatedParams {
-  page: number; // current page (1-based)
-  pageSize: number; // items per page
+  page?: number; // current page (1-based)
+  pageSize?: number; // items per page
+  search?: string;
 }
 
 export interface Paginated<T> {

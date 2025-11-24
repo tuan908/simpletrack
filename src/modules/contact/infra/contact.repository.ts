@@ -1,19 +1,35 @@
 import { ErrorCode } from "@/core/contracts/ErrorCodes";
 import { PaginatedParams } from "@/core/contracts/Paginated";
 import { Result } from "@/core/contracts/Result";
-import { contact, db, eq, isNull } from "@/infra/db/client";
-import { desc } from "drizzle-orm";
+import { and, contact, db, eq, isNull, or } from "@/infra/db/client";
+import { desc, ilike, type SQLWrapper } from "drizzle-orm";
 import { v7 } from "uuid";
 import { IContactRepository } from "../application/ports/contact-repository.interface";
 import { ContactStatus, CreateContactPayload } from "../domain/Contact";
 
 export const contactRepo: IContactRepository = {
-  async getContacts({ page = 1, pageSize = 10 }: PaginatedParams) {
+  async getContacts({ page = 1, pageSize = 10, search }: PaginatedParams) {
     const offset = (page - 1) * pageSize;
+
+    const conditions: (SQLWrapper | undefined)[] = [isNull(contact.deletedAt)];
+
+    if (search && search.trim()) {
+      const searchTerm = `%${search.trim()}%`;
+
+      conditions.push(
+        or(
+          ilike(contact.name, searchTerm),
+          ilike(contact.company, searchTerm),
+          ilike(contact.email, searchTerm),
+          ilike(contact.phone, searchTerm)
+        )
+      );
+    }
+
     return db
       .select()
       .from(contact)
-      .where(isNull(contact.deletedAt))
+      .where(and(...conditions))
       .limit(pageSize)
       .offset(offset)
       .orderBy(desc(contact.createdAt));
@@ -28,7 +44,7 @@ export const contactRepo: IContactRepository = {
         return Result.failWith(
           "Name is required",
           "name",
-          ErrorCode.VALIDATION_ERROR,
+          ErrorCode.VALIDATION_ERROR
         );
       }
 
@@ -55,7 +71,7 @@ export const contactRepo: IContactRepository = {
       return Result.failWith(
         String(err?.message ?? err),
         undefined,
-        ErrorCode.DATABASE_ERROR,
+        ErrorCode.DATABASE_ERROR
       );
     }
   },
@@ -84,7 +100,7 @@ export const contactRepo: IContactRepository = {
       return Result.failWith(
         String(err?.message ?? err),
         undefined,
-        ErrorCode.DATABASE_ERROR,
+        ErrorCode.DATABASE_ERROR
       );
     }
   },
@@ -108,7 +124,7 @@ export const contactRepo: IContactRepository = {
       return Result.failWith(
         String(err?.message ?? err),
         undefined,
-        ErrorCode.DATABASE_ERROR,
+        ErrorCode.DATABASE_ERROR
       );
     }
   },

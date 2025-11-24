@@ -2,9 +2,7 @@
 
 import { prefetch, trpc } from "@/api/trpc/server";
 import { ContactList } from "@/modules/contact/presentation/components/contact-list";
-import { ContactListSkeleton } from "@/modules/contact/presentation/components/contact-list-skeleton";
 import { CreateContactModal } from "@/modules/contact/presentation/components/create-contact-modal";
-import { Suspense } from "react";
 
 /**
  * Home / Dashboard
@@ -20,9 +18,7 @@ export default async function Dashboard() {
         <CreateContactModal />
       </div>
 
-      <Suspense fallback={<ContactListSkeleton count={20} />}>
         <ContactList />
-      </Suspense>
     </div>
   );
 }
