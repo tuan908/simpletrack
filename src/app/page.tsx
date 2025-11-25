@@ -3,8 +3,9 @@
 import { useDebounce } from "@/core/lib/hooks/useDebounce"; // Add useDebounce import
 import { ContactSearchInput } from "@/modules/contact/presentation/components/contact-search-input"; // Renamed from contact-search-input.tsx
 import { Contacts } from "@/modules/contact/presentation/components/contacts";
+import { ContactsSkeleton } from "@/modules/contact/presentation/components/contacts-skeleton";
 import { CreateContactModal } from "@/modules/contact/presentation/components/create-contact-modal";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 /**
  * Home / Dashboard
@@ -46,7 +47,9 @@ export default function Dashboard() {
         />
       </div>
 
-      <Contacts activeSearch={activeSearch} />
+      <Suspense fallback={<ContactsSkeleton count={10} />}>
+        <Contacts activeSearch={activeSearch} />
+      </Suspense>
     </div>
   );
 }
