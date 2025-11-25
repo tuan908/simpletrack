@@ -2,21 +2,23 @@ import { pgEnum, text, varchar } from "drizzle-orm/pg-core";
 import { pgTableWithAudit } from "../base/helper";
 import { contact } from "./contact";
 
-export const noteTypeEnum = pgEnum("note_type", [
+export const contactNoteTypeEnum = pgEnum("contact_note_type", [
   "Call",
   "Email",
   "Meeting",
   "Note",
 ]);
 
-export const note = pgTableWithAudit("note", {
+export type ContactNoteType = (typeof contactNoteTypeEnum.enumValues)[number];
+
+export const contactNote = pgTableWithAudit("contact_note", {
   id: varchar("id", { length: 255 }).primaryKey(),
   content: text("content").notNull(),
-  type: noteTypeEnum("type").notNull(),
+  type: contactNoteTypeEnum("type").notNull(),
   contactId: varchar("contact_id", { length: 255 })
     .notNull()
     .references(() => contact.id, { onDelete: "cascade" }),
 });
 
-export type NoteRow = typeof note.$inferSelect;
-export type NewNoteRow = typeof note.$inferInsert;
+export type ContactNoteRow = typeof contactNote.$inferSelect;
+export type NewContactNoteRow = typeof contactNote.$inferInsert;

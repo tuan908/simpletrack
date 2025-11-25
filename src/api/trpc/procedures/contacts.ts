@@ -4,8 +4,10 @@ import { contactModule } from "@/modules/contact";
 import z from "zod";
 import {
   createContactInput,
+  createContactNoteInput,
   deleteContactInput,
   updateContactInput,
+  updateContactNoteInput,
 } from "../schemas/contact";
 import { createTrpcRouter, publicProcedure } from "../trpc";
 
@@ -15,7 +17,7 @@ const getContactsInput = z.object({
   search: z.string().optional(),
 });
 
-export const contactsRouter = createTrpcRouter({
+export const contactRouter = createTrpcRouter({
   list: publicProcedure.input(getContactsInput).query(async ({ input }) => {
     const result = await contactModule.usecases.list.execute({
       page: input?.page ?? 1,
@@ -64,6 +66,18 @@ export const contactsRouter = createTrpcRouter({
           undefined,
           ErrorCode.INTERNAL_ERROR,
         );
+      return result;
+    }),
+  createNote: publicProcedure
+    .input(createContactNoteInput)
+    .mutation(async ({ input }) => {
+      const result = await contactModule.usecases.createNote.execute(input);
+      return result;
+    }),
+  updateNote: publicProcedure
+    .input(updateContactNoteInput)
+    .mutation(async ({ input }) => {
+      const result = await contactModule.usecases.updateNote.execute(input);
       return result;
     }),
 });

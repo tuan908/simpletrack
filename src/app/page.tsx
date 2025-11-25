@@ -46,7 +46,7 @@ export default function Dashboard() {
         />
       </div>
 
-        <Contacts activeSearch={activeSearch} />
+      <Contacts activeSearch={activeSearch} />
     </div>
   );
 }

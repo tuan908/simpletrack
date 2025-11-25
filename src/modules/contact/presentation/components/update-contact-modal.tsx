@@ -27,7 +27,9 @@ import { startTransition, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Contact, ContactStatus } from "../../domain/Contact";
 import { statusOptions } from "../../infra/contact.constant";
+import { useCreateContactNote } from "../hooks/useCreateContactNote";
 import { useUpdateContact } from "../hooks/useUpdateContact";
+import { NoteForm } from "./note-form";
 
 interface UpdateContactModalProps {
   contact: Contact;
@@ -37,7 +39,9 @@ interface UpdateContactModalProps {
 
 export function UpdateContactModal(props: UpdateContactModalProps) {
   const { contact, open, onClose } = props;
-  const { updateContact, loading } = useUpdateContact();
+  const { updateContact, loading: updateLoading } = useUpdateContact();
+  const { createNote, loading: createNoteLoading } = useCreateContactNote();
+  const loading = updateLoading || createNoteLoading;
   const {
     register,
     handleSubmit,
@@ -177,6 +181,19 @@ export function UpdateContactModal(props: UpdateContactModalProps) {
             />
           </DialogFooter>
         </form>
+
+        <div className="border-t pt-4 mt-4">
+          <h3 className="text-lg font-semibold mb-2">Add Note</h3>
+          {contact?.id && (
+            <NoteForm
+              contactId={contact.id}
+              onSave={(contactId, type, content) =>
+                createNote({ contactId, type: type as any, content })
+              }
+              loading={loading}
+            />
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );

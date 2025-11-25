@@ -1,5 +1,6 @@
 import { ContactStatus } from "@/modules/contact/domain/Contact";
 import z from "zod";
+import { contactNoteTypeEnum } from "@/infra/db/schema/note";
 
 export const createContactInput = z.object({
   name: z.string().min(1, "Name is required"),
@@ -37,3 +38,20 @@ export const deleteContactInput = z.object({
 });
 
 export type DeleteContactForm = z.infer<typeof deleteContactInput>;
+
+export const createContactNoteInput = z.object({
+  contactId: z.string().min(1, "Contact ID is required"),
+  content: z.string().min(1, "Note content cannot be empty"),
+  type: z.enum(contactNoteTypeEnum.enumValues),
+});
+
+export type CreateContactNoteForm = z.infer<typeof createContactNoteInput>;
+
+export const updateContactNoteInput = z.object({
+  id: z.string().min(1, "ID is required"),
+  contactId: z.string().min(1, "Contact ID is required"),
+  content: z.string().min(1, "Note content cannot be empty"),
+  type: z.enum(contactNoteTypeEnum.enumValues),
+});
+
+export type UpdateContactNoteForm = z.infer<typeof updateContactNoteInput>;

@@ -1,5 +1,4 @@
 import { useTRPC } from "@/api/trpc/client";
-import { createContactInput } from "@/api/trpc/schemas/contact";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -11,8 +10,7 @@ export function useCreateContact() {
       onError: (err, _newContact, _context) => {
         console.error("create contact failed", err);
         toast.error("Failed", {
-          description:
-            err instanceof Error ? err.message : "Failed to create contact.",
+          description: "Failed to create contact.",
         });
       },
       onSuccess: (data, _variables) => {
